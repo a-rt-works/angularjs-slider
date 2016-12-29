@@ -1119,12 +1119,24 @@
         this.translateFn(this.lowValue, this.minLab, 'model');
         this.setPosition(this.minLab, this.getHandleLabelPos('minLab', newPos));
 
+        this.scope.minPointerStyle = {};
+        this.scope.minBubbleStyle = {};
+
         if (this.options.getPointerColor) {
           var pointercolor = this.getPointerColor('min');
           this.scope.minPointerStyle = {
             backgroundColor: pointercolor
           };
         }
+
+        if (this.options.unselected) {
+          this.scope.minPointerStyle.visibility = 'hidden';
+          this.scope.minBubbleStyle.visibility = 'hidden';
+        } else {
+          this.scope.minPointerStyle.visibility = 'visible';
+          this.scope.minBubbleStyle.visibility = 'visible';
+        }
+
 
         if (this.options.autoHideLimitLabels) {
           this.shFloorCeil();
