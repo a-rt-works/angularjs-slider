@@ -1,7 +1,7 @@
 /*! angularjs-slider - v5.9.0 - 
  (c) Rafal Zajac <rzajac@gmail.com>, Valentin Hervieu <valentin@hervieu.me>, Jussi Saarivirta <jusasi@gmail.com>, Angelin Sirbu <angelin.sirbu@gmail.com> - 
  https://github.com/angular-slider/angularjs-slider - 
- 2016-12-29 */
+ 2016-12-30 */
 /*jslint unparam: true */
 /*global angular: false, console: false, define, module */
 (function(root, factory) {
@@ -81,7 +81,9 @@
       logScale: false,
       customValueToPosition: null,
       customPositionToValue: null,
-      selectionBarGradient: null
+      selectionBarGradient: null,
+      allowUnselected: false,
+      unselected: false
     };
     var globalOptions = {};
 
@@ -1125,14 +1127,15 @@
           };
         }
 
-        if (this.options.unselected) {
-          this.scope.minPointerStyle.visibility = 'hidden';
-          this.scope.minBubbleStyle.visibility = 'hidden';
-        } else {
-          this.scope.minPointerStyle.visibility = 'visible';
-          this.scope.minBubbleStyle.visibility = 'visible';
+        if (this.options.allowUnselect) {
+          if (this.options.unselected) {
+            this.hideEl(this.minH);
+            this.hideEl(this.minLab);
+          } else {
+            this.showEl(this.minH);
+            this.showEl(this.minLab);
+          }
         }
-
 
         if (this.options.autoHideLimitLabels) {
           this.shFloorCeil();
@@ -1178,9 +1181,10 @@
           isMinLabAtCeil = this.isLabelAboveCeilLab(this.minLab),
           isMaxLabAtCeil = this.isLabelAboveCeilLab(this.maxLab),
           isCmbLabAtFloor = this.isLabelBelowFloorLab(this.cmbLab),
-          isCmbLabAtCeil =  this.isLabelAboveCeilLab(this.cmbLab);
+          isCmbLabAtCeil =  this.isLabelAboveCeilLab(this.cmbLab),
+          hideOnUnselected = !this.options.unselected && !this.options.hideLimitLabels;
 
-        if (isMinLabAtFloor) {
+        if (isMinLabAtFloor && hideOnUnselected) {
           flHidden = true;
           this.hideEl(this.flrLab);
         } else {
@@ -1188,7 +1192,7 @@
           this.showEl(this.flrLab);
         }
 
-        if (isMinLabAtCeil) {
+        if (isMinLabAtCeil && hideOnUnselected) {
           clHidden = true;
           this.hideEl(this.ceilLab);
         } else {
@@ -2335,7 +2339,7 @@
   'use strict';
 
   $templateCache.put('rzSliderTpl.html',
-    "<div class=rzslider><span class=rz-bar-wrapper><span class=rz-bar></span></span> <span class=rz-bar-wrapper><span class=\"rz-bar rz-selection\" ng-style=barStyle></span></span> <span class=\"rz-pointer rz-pointer-min\" ng-style=minPointerStyle></span> <span class=\"rz-pointer rz-pointer-max\" ng-style=maxPointerStyle></span> <span class=\"rz-bubble rz-limit rz-floor\"></span> <span class=\"rz-bubble rz-limit rz-ceil\"></span> <span class=rz-bubble ng-style=minBubbleStyle></span> <span class=rz-bubble></span> <span class=rz-bubble></span><ul ng-show=showTicks class=rz-ticks><li ng-repeat=\"t in ticks track by $index\" class=rz-tick ng-class=\"{'rz-selected': t.selected}\" ng-style=t.style ng-attr-uib-tooltip=\"{{ t.tooltip }}\" ng-attr-tooltip-placement={{t.tooltipPlacement}} ng-attr-tooltip-append-to-body=\"{{ t.tooltip ? true : undefined}}\"><span ng-if=\"t.value != null\" class=rz-tick-value ng-attr-uib-tooltip=\"{{ t.valueTooltip }}\" ng-attr-tooltip-placement={{t.valueTooltipPlacement}}>{{ t.value }}</span> <span ng-if=\"t.legend != null\" class=rz-tick-legend>{{ t.legend }}</span></li></ul></div>"
+    "<div class=rzslider><span class=rz-bar-wrapper><span class=rz-bar></span></span> <span class=rz-bar-wrapper><span class=\"rz-bar rz-selection\" ng-style=barStyle></span></span> <span class=\"rz-pointer rz-pointer-min\" ng-style=minPointerStyle></span> <span class=\"rz-pointer rz-pointer-max\" ng-style=maxPointerStyle></span> <span class=\"rz-bubble rz-limit rz-floor\"></span> <span class=\"rz-bubble rz-limit rz-ceil\"></span> <span class=rz-bubble></span> <span class=rz-bubble></span> <span class=rz-bubble></span><ul ng-show=showTicks class=rz-ticks><li ng-repeat=\"t in ticks track by $index\" class=rz-tick ng-class=\"{'rz-selected': t.selected}\" ng-style=t.style ng-attr-uib-tooltip=\"{{ t.tooltip }}\" ng-attr-tooltip-placement={{t.tooltipPlacement}} ng-attr-tooltip-append-to-body=\"{{ t.tooltip ? true : undefined}}\"><span ng-if=\"t.value != null\" class=rz-tick-value ng-attr-uib-tooltip=\"{{ t.valueTooltip }}\" ng-attr-tooltip-placement={{t.valueTooltipPlacement}}>{{ t.value }}</span> <span ng-if=\"t.legend != null\" class=rz-tick-legend>{{ t.legend }}</span></li></ul></div>"
   );
 
 }]);
