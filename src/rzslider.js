@@ -1186,7 +1186,7 @@
           isMaxLabAtCeil = this.isLabelAboveCeilLab(this.maxLab),
           isCmbLabAtFloor = this.isLabelBelowFloorLab(this.cmbLab),
           isCmbLabAtCeil =  this.isLabelAboveCeilLab(this.cmbLab),
-          hideOnUnselected = this.allowUnselected && !this.options.unselected && !this.options.hideLimitLabels;
+          hideOnUnselected = this.options.allowUnselected && !this.options.unselected && !this.options.hideLimitLabels;
 
         if (isMinLabAtFloor && hideOnUnselected) {
           flHidden = true;
