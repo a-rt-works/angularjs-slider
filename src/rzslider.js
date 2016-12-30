@@ -1131,7 +1131,7 @@
           };
         }
 
-        if (this.options.allowUnselect) {
+        if (this.options.allowUnselected) {
           if (this.options.unselected) {
             this.hideEl(this.minH);
             this.hideEl(this.minLab);
@@ -1186,7 +1186,7 @@
           isMaxLabAtCeil = this.isLabelAboveCeilLab(this.maxLab),
           isCmbLabAtFloor = this.isLabelBelowFloorLab(this.cmbLab),
           isCmbLabAtCeil =  this.isLabelAboveCeilLab(this.cmbLab),
-          hideOnUnselected = !this.options.unselected && !this.options.hideLimitLabels;
+          hideOnUnselected = this.allowUnselected && !this.options.unselected && !this.options.hideLimitLabels;
 
         if (isMinLabAtFloor && hideOnUnselected) {
           flHidden = true;
