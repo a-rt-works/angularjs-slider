@@ -85,7 +85,9 @@
       logScale: false,
       customValueToPosition: null,
       customPositionToValue: null,
-      selectionBarGradient: null
+      selectionBarGradient: null,
+      allowUnselected: false,
+      unselected: false
     };
     var globalOptions = {};
 
@@ -1129,14 +1131,15 @@
           };
         }
 
-        if (this.options.unselected) {
-          this.scope.minPointerStyle.visibility = 'hidden';
-          this.scope.minBubbleStyle.visibility = 'hidden';
-        } else {
-          this.scope.minPointerStyle.visibility = 'visible';
-          this.scope.minBubbleStyle.visibility = 'visible';
+        if (this.options.allowUnselect) {
+          if (this.options.unselected) {
+            this.hideEl(this.minH);
+            this.hideEl(this.minLab);
+          } else {
+            this.showEl(this.minH);
+            this.showEl(this.minLab);
+          }
         }
-
 
         if (this.options.autoHideLimitLabels) {
           this.shFloorCeil();
@@ -1182,9 +1185,10 @@
           isMinLabAtCeil = this.isLabelAboveCeilLab(this.minLab),
           isMaxLabAtCeil = this.isLabelAboveCeilLab(this.maxLab),
           isCmbLabAtFloor = this.isLabelBelowFloorLab(this.cmbLab),
-          isCmbLabAtCeil =  this.isLabelAboveCeilLab(this.cmbLab);
+          isCmbLabAtCeil =  this.isLabelAboveCeilLab(this.cmbLab),
+          hideOnUnselected = !this.options.unselected && !this.options.hideLimitLabels;
 
-        if (isMinLabAtFloor) {
+        if (isMinLabAtFloor && hideOnUnselected) {
           flHidden = true;
           this.hideEl(this.flrLab);
         } else {
@@ -1192,7 +1196,7 @@
           this.showEl(this.flrLab);
         }
 
-        if (isMinLabAtCeil) {
+        if (isMinLabAtCeil && hideOnUnselected) {
           clHidden = true;
           this.hideEl(this.ceilLab);
         } else {
